@@ -4,14 +4,24 @@ using UnityEngine;
 
 public class math : MonoBehaviour
 {
-    float jumpSpeed = 5.2f;
-    float gravitation = 9.8f;
+    int dasha = 10;
+    int masha = 20;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        float Result = jumpSpeed * 1.6f - 0.5f * gravitation * (1.6f * 1.6f);
-        print(Result);
+        if (dasha > masha)
+        {
+            int babax = (dasha - masha) / 2;
+            print(babax);
+            print("dasha");
+        }
+        else
+        {
+            int bubux = (masha - dasha) / 2;
+            print(bubux);
+            print("masha");
+        }
     }
 
     // Update is called once per frame
