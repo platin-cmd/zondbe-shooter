@@ -7,7 +7,9 @@ public class pistolController : MonoBehaviour
     public GameObject bullet;
     public Transform bulletPlace;
 
-    public AudioClip  boomSound;
+    public AudioSource  boomSound;
+
+    public AudioSource boBoomSound;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -19,8 +21,23 @@ public class pistolController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            Instantiate(bullet, bulletPlace.position, Quaternion.identity);
-            AudioSource.PlayClipAtPoint(boomSound, bulletPlace.position);
+            Instantiate(bullet, bulletPlace.position, transform.rotation);
+
+            boomSound.PlayOneShot(boomSound.clip);
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            boBoomSound.PlayOneShot(boBoomSound.clip);
+            for (int i = 0; i < 200; i++)
+            {
+                Instantiate(bullet, bulletPlace.position, transform.rotation);
+
+
+            }
+
+            
+
         }
     }
 }
