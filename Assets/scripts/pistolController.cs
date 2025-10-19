@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 
@@ -10,18 +11,40 @@ public class pistolController : MonoBehaviour
     public AudioSource  boomSound;
 
     public AudioSource boBoomSound;
+
+    public LayerMask aimPlayer;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
 
     }
 
+    Vector3 GetCrosshairDirection()
+    {
+        Transform cameraTransform = Camera.main.transform;
+
+        RaycastHit hit;
+        if (Physics.Raycast(Camera.main.transform.position, cameraTransform.forward, out hit))
+        {
+            Vector3 dir = (hit.point - transform.position).normalized;
+            return dir;
+        }
+
+        return transform.forward;
+    }
+
     // Update is called once per frame
     void Update()
     {
+        
         if (Input.GetMouseButtonDown(0))
         {
-            Instantiate(bullet, bulletPlace.position, transform.rotation);
+
+            Vector3 dir = GetCrosshairDirection();
+            GameObject bulletObj = Instantiate(bullet, bulletPlace.position, Quaternion.Euler(dir));
+            bulletObj.transform.forward = dir;
+
+
 
             boomSound.PlayOneShot(boomSound.clip);
         }
@@ -31,13 +54,18 @@ public class pistolController : MonoBehaviour
             boBoomSound.PlayOneShot(boBoomSound.clip);
             for (int i = 0; i < 200; i++)
             {
+
+                
                 Instantiate(bullet, bulletPlace.position, transform.rotation);
 
 
             }
 
-            
+
 
         }
     }
-}
+
+   
+    }
+
