@@ -1,7 +1,7 @@
 using StarterAssets;
 using UnityEngine;
 
-public class slide : MonoBehaviour
+public class dash : MonoBehaviour
 {
 
     public FirstPersonController fpc;

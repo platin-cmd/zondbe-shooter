@@ -14,6 +14,11 @@ public class slideController : MonoBehaviour
 
     Rigidbody rb;
 
+    public Transform cameraCrouchPlace;
+
+    public Transform cameraTransform;
+
+    Vector3 initialCameraPosition;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -22,6 +27,7 @@ public class slideController : MonoBehaviour
         controller = GetComponent<CharacterController>();
         duckController = GetComponent<duck>();
         rb = GetComponent<Rigidbody>();
+        initialCameraPosition = cameraTransform.localPosition;
     }
 
 
@@ -30,15 +36,20 @@ public class slideController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.LeftControl) && duckController.isDuck == false)
         {
-            Vector3 slideDirection = fpc.transform.forward;
+            float moveX = Input.GetAxis("Horizontal");
+            float moveY = Input.GetAxis("Vertical");
+            Vector3 move = new Vector3(moveX, 0, moveY).normalized;
+            Vector3 slideDirection = transform.TransformDirection(move);
             controller.enabled = false;
             rb.AddForce(slideDirection * slideSpeed, ForceMode.Impulse);
             Invoke("EnableFPC", 0.5f);
+            cameraTransform.localPosition = cameraCrouchPlace.localPosition;
         }
     }
 
     void EnableFPC()
     {
         controller.enabled = true;
+        cameraTransform.localPosition = initialCameraPosition;
     }
 }

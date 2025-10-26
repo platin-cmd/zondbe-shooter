@@ -13,6 +13,8 @@ public class pistolController : MonoBehaviour
     public AudioSource boBoomSound;
 
     public LayerMask aimPlayer;
+
+    public Animator animator;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -39,8 +41,8 @@ public class pistolController : MonoBehaviour
         
         if (Input.GetMouseButtonDown(0))
         {
-
-            Vector3 dir = GetCrosshairDirection();
+            animator.SetTrigger("shoot");
+            Vector3 dir = bulletPlace.forward;
             GameObject bulletObj = Instantiate(bullet, bulletPlace.position, Quaternion.Euler(dir));
             bulletObj.transform.forward = dir;
 
