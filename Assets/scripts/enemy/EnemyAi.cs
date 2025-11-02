@@ -9,11 +9,14 @@ public class EnemyAi : MonoBehaviour
     string state = "chase";
 
     GameObject player;
+
+    EnemyHealth enemyHealth;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         player = GameObject.FindWithTag("Player");
+        enemyHealth = GetComponent<EnemyHealth>();
     }
 
     // Update is called once per frame
@@ -27,6 +30,10 @@ public class EnemyAi : MonoBehaviour
         {
             agent.ResetPath();
         }
+        else if (state == "death")
+        {
+            agent.ResetPath();
+        }
 
         float distance = Vector3.Distance(transform.position, player.transform.position);
         if (state == "chase" && distance < 2.0f)
@@ -36,6 +43,10 @@ public class EnemyAi : MonoBehaviour
         else if (state == "attack" && distance >= 2.0f)
         {
             state = "chase";
+        }
+        if (enemyHealth.health <= 0)
+        {
+            state = "death";
         }
         
     }

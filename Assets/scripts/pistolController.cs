@@ -15,6 +15,8 @@ public class pistolController : MonoBehaviour
     public LayerMask aimPlayer;
 
     public Animator animator;
+
+    public GameObject bullet2;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -58,7 +60,7 @@ public class pistolController : MonoBehaviour
             {
 
                 
-                Instantiate(bullet, bulletPlace.position, transform.rotation);
+                Instantiate(bullet2, bulletPlace.position, transform.rotation);
 
 
             }

@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -2774947185424949618}
   - component: {fileID: -4222565293079346975}
   m_Layer: 6
-  m_Name: Bullet_Pistol_B
+  m_Name: bullet2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -156,7 +156,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::bullet
   speed: 100
-  damage: 20
+  damage: 1
 --- !u!1 &6144363844457194292
 GameObject:
   m_ObjectHideFlags: 0
