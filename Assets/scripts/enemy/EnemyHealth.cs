@@ -1,4 +1,5 @@
 using Unity.VisualScripting;
+using UnityEditor.Callbacks;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,21 +11,37 @@ public class EnemyHealth : MonoBehaviour
     public float health;
 
     Animator animator;
+    bool IsAlive = true;
+
+    Rigidbody rb;
+
+    public GameObject zombiePrefab;
+
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         health = maxHealth;
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
+        
     }
 
     public void TakeDamage(float damage)
     {
         health -= damage;
-        if(health <= 0)
+        if (health <= 0)
         {
+            IsAlive = false;
             animator.SetTrigger("Death");
-            Destroy(gameObject,5);
+            Invoke("AddRB", 0.583f);
+
         }
+    }
+    
+    void AddRB()
+    {
+        Instantiate(zombiePrefab, transform.position, transform.rotation);
+        Destroy(gameObject);
     }
 
     // Update is called once per frame
