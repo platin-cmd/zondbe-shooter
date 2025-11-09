@@ -9587,9 +9587,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 657aa4cb6cc5a154f994fd466721e3e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::slide
-  fpc: {fileID: 0}
-  duckController: {fileID: 0}
-  slideSpeed: 37.5
 --- !u!114 &257073471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -33421,7 +33418,6 @@ GameObject:
   - component: {fileID: 893293683}
   - component: {fileID: 893293682}
   - component: {fileID: 893293681}
-  - component: {fileID: 893293688}
   m_Layer: 0
   m_Name: Zombie
   m_TagString: enemy
@@ -33573,33 +33569,6 @@ Transform:
   - {fileID: 214457096}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &893293688
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 893293680}
-  serializedVersion: 5
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!1 &895460864 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100000, guid: 93d0d450ec8b42e46b724bf2bbee330b, type: 3}
@@ -82581,7 +82550,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1584713464006993212, guid: 199e559bc530b73459cd13e9aead2f76, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 195.68
+      value: 197.506
       objectReference: {fileID: 0}
     - target: {fileID: 1584713464006993212, guid: 199e559bc530b73459cd13e9aead2f76, type: 3}
       propertyPath: m_LocalRotation.w
