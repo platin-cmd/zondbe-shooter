@@ -2634,6 +2634,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 1350608758}
   m_SourcePrefab: {fileID: 100100000, guid: 9b25e71fd5b7ac6469539d930c6dc2e6, type: 3}
+--- !u!1 &72927750 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 13b8f595b8f38824bb0d17f52af07232, type: 3}
+  m_PrefabInstance: {fileID: 1554706165}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &73134002
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9618,9 +9623,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 657aa4cb6cc5a154f994fd466721e3e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::slide
-  fpc: {fileID: 0}
-  duckController: {fileID: 0}
-  slideSpeed: 37.5
 --- !u!114 &257073471
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54530,6 +54532,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 13b8f595b8f38824bb0d17f52af07232, type: 3}
   m_PrefabInstance: {fileID: 1554706165}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1404462276
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 72927750}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e39e1c43e8b5a4249b8d9ccc8e0a762a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::KatanaController
+  animator: {fileID: 1180920864}
 --- !u!1001 &1405817759
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59933,7 +59948,10 @@ PrefabInstance:
     m_RemovedGameObjects:
     - {fileID: -405359948503542223, guid: 13b8f595b8f38824bb0d17f52af07232, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 13b8f595b8f38824bb0d17f52af07232, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1404462276}
   m_SourcePrefab: {fileID: 100100000, guid: 13b8f595b8f38824bb0d17f52af07232, type: 3}
 --- !u!1 &1555019977 stripped
 GameObject:
