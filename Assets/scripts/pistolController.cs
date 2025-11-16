@@ -6,6 +6,11 @@ public class pistolController : MonoBehaviour
 {
 
     public GameObject bullet;
+
+    public GameObject muzzleFlash;
+
+    public Transform muzzlePlace;
+
     public Transform bulletPlace;
 
     public AudioSource  boomSound;
@@ -41,17 +46,7 @@ public class pistolController : MonoBehaviour
     void Update()
     {
         
-        if (Input.GetMouseButtonDown(0))
-        {
-            animator.SetTrigger("shoot");
-            Vector3 dir = bulletPlace.forward;
-            GameObject bulletObj = Instantiate(bullet, bulletPlace.position, Quaternion.Euler(dir));
-            bulletObj.transform.forward = dir;
-
-
-
-            boomSound.PlayOneShot(boomSound.clip);
-        }
+        
 
         if (Input.GetMouseButtonDown(1))
         {

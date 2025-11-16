@@ -42,15 +42,17 @@ public class EnemyAi : MonoBehaviour
         }
 
         float distance = Vector3.Distance(transform.position, player.transform.position);
-        if (state == "chase" && distance < 2.0f)
+        if (state == "chase" && distance < 2.5f)
         {
             state = "attack";
             animator.SetBool("Attack", true);
+            player.GetComponent<PlayerHealth> ().TimeToDie();
         }
-        else if (state == "attack" && distance >= 2.0f)
+        else if (state == "attack" && distance >= 2.5f)
         {
             state = "chase";
             animator.SetBool("Attack", false);
+            player.GetComponent<PlayerHealth>().StopAllCoroutines();
         }
         if (enemyHealth.health <= 0)
         {
