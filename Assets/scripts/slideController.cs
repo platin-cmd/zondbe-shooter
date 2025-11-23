@@ -20,6 +20,7 @@ public class slideController : MonoBehaviour
 
     Vector3 initialCameraPosition;
 
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -44,6 +45,7 @@ public class slideController : MonoBehaviour
             rb.AddForce(slideDirection * slideSpeed, ForceMode.Impulse);
             Invoke("EnableFPC", 0.5f);
             cameraTransform.localPosition = cameraCrouchPlace.localPosition;
+            
         }
     }
 

@@ -29,7 +29,7 @@ public class EnemyHealth : MonoBehaviour
     public void TakeDamage(float damage)
     {
         health -= damage;
-        if (health <= 0)
+        if (health <= 0 && IsAlive)
         {
             IsAlive = false;
             animator.SetTrigger("Death");
