@@ -8,6 +8,8 @@ public class bullet : MonoBehaviour
     public float speed;
 
     public int damage = 20;
+
+    public GameObject fleshImpact;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void OnCollisionEnter(Collision collision)
@@ -21,6 +23,10 @@ public class bullet : MonoBehaviour
             EnemyHealth enemyHealth = collision.gameObject.GetComponent<EnemyHealth>();
             enemyHealth.TakeDamage(damage);
             Destroy(gameObject);
+
+            Vector3  point = collision.GetContact(0).point;
+
+            Instantiate(fleshImpact, point, Quaternion.identity );
         }
     }
 
