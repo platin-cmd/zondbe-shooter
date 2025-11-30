@@ -21,5 +21,10 @@ public class KatanaController : MonoBehaviour
         {
             animator.SetTrigger("attack");
         }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            animator.SetTrigger("flexxx");
+        }
     }
 }

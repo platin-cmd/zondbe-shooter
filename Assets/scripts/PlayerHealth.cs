@@ -16,6 +16,9 @@ public class PlayerHealth : MonoBehaviour
 
     public GameObject pricel;
 
+    
+
+    
     public void TimeToDie()
     {
         StartCoroutine("Dead");
@@ -29,6 +32,8 @@ public class PlayerHealth : MonoBehaviour
         virtualCamera.Follow = cameraRoot.transform;
         Text.SetActive(true);
         pricel.SetActive(false);
+        
+        
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

@@ -45,6 +45,8 @@ public class pistolController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+        
         
         
 
@@ -62,6 +64,11 @@ public class pistolController : MonoBehaviour
 
 
 
+        }
+
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            animator.SetTrigger("flex");
         }
     }
 
