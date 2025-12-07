@@ -51,6 +51,7 @@ public class slide : MonoBehaviour
             controller.Move(slideDirection * slideSpeed * Time.deltaTime);
             isDashing = true;
             Invoke("ResetDash",0.5f);
+            
 
     }
 
