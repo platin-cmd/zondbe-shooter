@@ -1,4 +1,5 @@
 using GLTFast;
+using UnityEditor.Rendering;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -19,6 +20,10 @@ public class ShootZombie : MonoBehaviour
 
     public LayerMask layerMask;
 
+    public Vector3 playerCheckOffset;
+
+    float distance;
+
 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -34,41 +39,84 @@ public class ShootZombie : MonoBehaviour
     void Update()
     {
 
+        distance = Vector3.Distance(transform.position,player.position + playerCheckOffset);
+
         Vision();
         switch (state)
         {
             case "chase":
                 agent.SetDestination(player.position);
 
-                float distance = Vector3.Distance(transform.position, player.position);
+                
 
                 if (seePlayer && distance > runDistance)
                 {
                     state = "shoot";
                     animator.SetBool("attack",true);
                 }
+
+                if(distance < runDistance)
+                {
+                    state = "runaway";
+                }
+
+                transform.GetComponentInChildren<Animator>().transform.LookAt(player.position);
                 break;
             case "shoot":
                 agent.ResetPath();
+                animator.SetBool("attack",true);
                 
-                distance = Vector3.Distance(transform.position, player.position);
+                
                 if(!seePlayer && distance > runDistance)
                 {
                     state="chase";
                     animator.SetBool("attack",false);
                 }
 
+                if(distance < runDistance)
+                {
+                    state = "runaway";
+                }
+
 
 
                 break;
             case "runaway":
-                break;
+            animator.SetBool("attack",false);
+            Vector3 dir = (player.position + playerCheckOffset - transform.position).normalized;
+
+            agent.SetDestination(transform.position - dir);
+            distance = Vector3.Distance(transform.position,player.position);
+
+            if (distance > runDistance)
+                {
+                    if (seePlayer)
+                    {
+                        state = "shoot";
+                    }
+                    else
+                    {
+                        state = "chase";
+                    }
+                }
+            break;
         }
     }
 
     void Vision()
     {
-        Vector3 dir = (player.position - transform.position).normalized;
-        seePlayer = Physics.Raycast(transform.position,dir,10000,layerMask);
+        Vector3 dir = (player.position + playerCheckOffset - transform.position).normalized;
+        RaycastHit hit;
+        Physics.Raycast(transform.position,dir,out hit, 10000,layerMask);
+
+        seePlayer = hit.collider.transform.parent.gameObject == player.gameObject;
+        if (seePlayer)
+        {
+            print(gameObject.name + "видит игрока");
+        }
+        else
+        {
+            print(gameObject.name + "не видит игрока");
+        }
     }
 }

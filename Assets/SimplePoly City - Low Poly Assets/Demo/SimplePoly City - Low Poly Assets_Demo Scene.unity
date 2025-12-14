@@ -62992,6 +62992,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 123
+  playerCheckOffset: {x: 0, y: 3, z: 0}
 --- !u!195 &1617594966
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -85021,8 +85022,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6971496768344376166}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.6013481, y: 0.6260252, z: 0.39414704, w: -0.30186254}
-  m_LocalPosition: {x: 0.78643286, y: 1.2882107, z: -3.0738482}
+  m_LocalRotation: {x: 0.28304687, y: 0.73534006, z: -0.080836676, w: -0.6104301}
+  m_LocalPosition: {x: 1.52, y: 3.15, z: -4.12}
   m_LocalScale: {x: 19.259, y: 19.259005, z: 19.259}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -85037,7 +85038,7 @@ Transform:
   - {fileID: 1347769101}
   - {fileID: 233865210}
   m_Father: {fileID: 543450652532817718}
-  m_LocalEulerAnglesHint: {x: -179.413, y: 181.712, z: -161.554}
+  m_LocalEulerAnglesHint: {x: -13.101, y: 255.633, z: -328.081}
 --- !u!4 &7865555247974019997
 Transform:
   m_ObjectHideFlags: 0
