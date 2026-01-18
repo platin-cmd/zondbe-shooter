@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEditor.Animations;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ public class weaponChanger : MonoBehaviour
     Animator animator;
     public GameObject pistolObject;
     public GameObject shotgunObject;
+    public GameObject Radius;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -43,5 +45,20 @@ public class weaponChanger : MonoBehaviour
             animator.SetTrigger("TakePistol");
         }
     }
+    public void reload()
+    {
+        if (pistolObject.activeSelf)
+        {
+            pistolObject.GetComponent<pistolController>().reload();
+        }
+        else if (shotgunObject.activeSelf)
+        {
+            shotgunObject.GetComponent<shotgunController>().reloadShotgun();
+        }
+    }
+
+    
+    
+    
     
 }
