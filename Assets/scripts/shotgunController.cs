@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using StarterAssets;
+using UnityEditor.Experimental.GraphView;
 
 public class shotgunController : MonoBehaviour
 {
@@ -13,25 +16,34 @@ public class shotgunController : MonoBehaviour
 
     public Animator animator;
 
-    
+    public FirstPersonController fpc;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         magazineCurrentShotgun = magazineMaxShotgun;
         ammoTextShotgun.text = magazineCurrentShotgun + "/"+ magazineMaxShotgun;
+        fpc = GetComponent<FirstPersonController>();
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if (Input.GetMouseButtonDown(1) && fpc.Grounded != true)
+        {
+            fpc.Gravity = -145;
+        }
         if (Input.GetMouseButtonDown(1))
         {
+
             if (magazineCurrentShotgun == 0)
             {
                 //добавь звук дебик
                 animator.SetTrigger("reloadShotgun");
                 return;
             } 
+
+           
             animator.SetTrigger("shootShotgun");
             magazineCurrentShotgun--;
             ammoTextShotgun.text = magazineCurrentShotgun + "/"+ magazineMaxShotgun;
@@ -45,6 +57,7 @@ public class shotgunController : MonoBehaviour
     {
         magazineCurrentShotgun = magazineMaxShotgun;
         ammoTextShotgun.text = magazineCurrentShotgun + "/"+ magazineMaxShotgun;
+        
     }
     
 

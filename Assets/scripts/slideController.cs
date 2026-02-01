@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using StarterAssets;
 using UnityEngine;
 
@@ -20,6 +21,8 @@ public class slideController : MonoBehaviour
 
     Vector3 initialCameraPosition;
 
+    public SpeedReset speedReset;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,6 +32,7 @@ public class slideController : MonoBehaviour
         duckController = GetComponent<duck>();
         rb = GetComponent<Rigidbody>();
         initialCameraPosition = cameraTransform.localPosition;
+        
     }
 
 
@@ -37,6 +41,7 @@ public class slideController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.LeftControl) && duckController.isDuck == false)
         {
+            slideSpeed = fpc.MoveSpeed * 1.5f;
             float moveX = Input.GetAxis("Horizontal");
             float moveY = Input.GetAxis("Vertical");
             Vector3 move = new Vector3(moveX, 0, moveY).normalized;
@@ -45,6 +50,11 @@ public class slideController : MonoBehaviour
             rb.AddForce(slideDirection * slideSpeed, ForceMode.Impulse);
             Invoke("EnableFPC", 0.5f);
             cameraTransform.localPosition = cameraCrouchPlace.localPosition;
+
+            fpc.MoveSpeed += 10f;
+            speedReset.StopAllCoroutines();
+            speedReset.isResetting=false;
+            
             
         }
     }

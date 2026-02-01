@@ -1,5 +1,6 @@
 using System;
 using StarterAssets;
+using Unity.VisualScripting.FullSerializer;
 using UnityEngine;
 
 public class slide : MonoBehaviour
@@ -15,13 +16,16 @@ public class slide : MonoBehaviour
 
     public bool isDashing = false;
 
+    public SpeedReset speedReset;
 
+    public StaminaController staminaController;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         fpc = GetComponent<FirstPersonController>();
         controller = GetComponent<CharacterController>();
         duckController = GetComponent<duck>();
+        
     }
 
     void OnCollisionEnter(Collision collision)
@@ -37,9 +41,14 @@ public class slide : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift) && duckController.isDuck == false && !isDashing)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && duckController.isDuck == false && !isDashing && staminaController.stamina > 1)
         {
+            staminaController.stamina-=1;
+            slideSpeed = fpc.MoveSpeed * 24;
             Dash();
+            fpc.MoveSpeed += 20;
+            speedReset.StopAllCoroutines();
+            speedReset.isResetting=false;
 
         }
     }

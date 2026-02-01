@@ -10,6 +10,8 @@ public class bullet : MonoBehaviour
     public int damage = 20;
 
     public GameObject fleshImpact;
+
+    public AudioSource hit_sound;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     void OnCollisionEnter(Collision collision)
@@ -27,6 +29,7 @@ public class bullet : MonoBehaviour
             Vector3  point = collision.GetContact(0).point;
 
             Instantiate(fleshImpact, point, Quaternion.identity );
+            hit_sound.PlayOneShot(hit_sound.clip);
         }
     }
 
