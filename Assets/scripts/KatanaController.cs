@@ -25,10 +25,34 @@ public class KatanaController : MonoBehaviour
     {
         if (Input.GetMouseButtonDown(0))
         {
-            animator.SetTrigger("attack");
             
+            
+            string CurrentAnimName = animator.GetCurrentAnimatorClipInfo(0)[0].clip.name;
 
-            animator.SetInteger("ComboIndex", animator.GetInteger("ComboIndex")+ 1);
+            if(CurrentAnimName == "idle")
+            {
+                animator.SetTrigger("attack");
+            }
+
+            else if(CurrentAnimName == "attack1")
+            {
+                animator.SetTrigger("attack");
+                animator.SetInteger("ComboIndex",2);
+            }
+
+            else if(CurrentAnimName == "attack2")
+            {
+                animator.SetTrigger("attack");
+                animator.SetInteger("ComboIndex", 3);
+            }
+
+            else if(CurrentAnimName == "attack3")
+            {
+                animator.SetTrigger("attack");
+                animator.SetInteger("ComboIndex",1);
+            }
+
+            
 
             // if(animator.GetInteger("ComboIndex") == 3)
             // {
