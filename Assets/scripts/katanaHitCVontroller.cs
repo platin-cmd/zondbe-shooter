@@ -1,34 +1,34 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class katanaHitCVontroller : MonoBehaviour
 {
 
     public int Kdamage = 200;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [Header("Hit Settings")]
+    public float radius = 1;
+    public Vector3 offset = Vector3.zero;
 
-    void OnTriggerEnter(Collider other)
+    public void CheckAttackSphere()
     {
-        if (other .gameObject.tag == "enemy")
+        print("mama katana");
+        Collider[] colliders = Physics.OverlapSphere(Camera.main.transform.position + offset, radius);
+        foreach (var col in colliders)
         {
-            EnemyHealth enemyHealth = other.gameObject.GetComponent<EnemyHealth>();
-            enemyHealth.TakeDamage(Kdamage);
-            
-
-            
-
-            
-            
+            if (col.tag == "enemy")
+            {
+                col.GetComponent<EnemyHealth>().TakeDamage(Kdamage);
+            }
+            else if (col.tag == "Sharik")
+            {
+                col.GetComponent<SharikController>().FlyBack();
+            }
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(Camera.main.transform.position + offset, radius);
     }
 }

@@ -29202,6 +29202,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0b9674449754daa4bb5eec7fd58707e1, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1180920864}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 0b9674449754daa4bb5eec7fd58707e1, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1180920866}
   m_SourcePrefab: {fileID: 100100000, guid: 0b9674449754daa4bb5eec7fd58707e1, type: 3}
 --- !u!1001 &770392197
 PrefabInstance:
@@ -45309,6 +45312,21 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0b9674449754daa4bb5eec7fd58707e1, type: 3}
   m_PrefabInstance: {fileID: 770318825}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1180920866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1180920863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b60d24ddbc13c8a4d81482fd83e8481d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::katanaHitCVontroller
+  Kdamage: 200
+  radius: 2.12
+  offset: {x: 0, y: -0.45, z: 1.98}
 --- !u!1001 &1181746009
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -55785,7 +55803,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::KatanaController
   animator: {fileID: 1180920864}
-  htsound: {fileID: 1419970}
 --- !u!1001 &1405817759
 PrefabInstance:
   m_ObjectHideFlags: 0

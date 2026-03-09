@@ -56,8 +56,9 @@ public class EnemyAi : MonoBehaviour
         }
         if (enemyHealth.health <= 0)
         {
-            state = "death";
+            state = "death"; 
         }
         
     }
 }
+
