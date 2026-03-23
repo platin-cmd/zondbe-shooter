@@ -22,10 +22,10 @@ public class ShootZombie : MonoBehaviour
 
     public Vector3 playerCheckOffset;
 
+
     float distance;
 
-
-
+    
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

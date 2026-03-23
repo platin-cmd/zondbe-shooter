@@ -8,6 +8,8 @@ TagManager:
   - map
   - enemy
   - ignoreCollision
+  - S
+  - Sharik
   layers:
   - Default
   - TransparentFX

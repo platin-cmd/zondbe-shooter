@@ -16,11 +16,22 @@ public class PlayerHealth : MonoBehaviour
 
     public GameObject pricel;
 
-    
+    public bool GodModeSigmaMoment = false;
 
-    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Sharik"))
+        {
+            TimeToDie();
+        }
+    }
+
+
+
+
     public void TimeToDie()
     {
+        if (GodModeSigmaMoment) return;
         StartCoroutine("Dead");
     }
     public IEnumerator Dead()

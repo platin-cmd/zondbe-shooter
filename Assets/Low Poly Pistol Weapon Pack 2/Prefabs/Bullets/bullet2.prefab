@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2383098910929414220}
   m_Layer: 6
   m_Name: bullet2
-  m_TagString: Untagged
+  m_TagString: bullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -131,6 +131,7 @@ MonoBehaviour:
   speed: 100
   damage: 1
   fleshImpact: {fileID: 588662416759379030, guid: 029bdecc416f1f04daa440b8960e0a37, type: 3}
+  hit_sound: {fileID: 0}
 --- !u!54 &2383098910929414220
 Rigidbody:
   m_ObjectHideFlags: 0
