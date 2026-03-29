@@ -438,7 +438,7 @@ GameObject:
   - component: {fileID: 1732096652}
   - component: {fileID: 1732096651}
   - component: {fileID: 1732096654}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Main Camera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
@@ -577,7 +577,7 @@ GameObject:
   - component: {fileID: 1761091260}
   - component: {fileID: 1761091259}
   - component: {fileID: 1761091264}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player 2.0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -609,7 +609,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!136 &1761091260
 CapsuleCollider:
@@ -720,9 +720,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   walkSpeed: 10
   crouchSpeed: 3
-  jumpForce: 5
   mouseSensative: 1000
   playerCamera: {fileID: 1732096650}
+  jumpForce: 5
+  GroundCheckOffset: {x: 0, y: -1.26, z: 0}
+  groundCheckRadius: 0.54
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 119
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -12,13 +12,23 @@ public class PlayerController : MonoBehaviour
 
     public float crouchSpeed = 3;
 
-    public float jumpForce = 5; 
-
     [Header("Камера")]
 
     public float mouseSensative = 4;
 
     public GameObject playerCamera;
+
+    [Header("Прыгало")]
+
+    public float jumpForce = 5; 
+
+    public Vector3 GroundCheckOffset;
+
+    public float groundCheckRadius = 0.3f;
+
+    bool isGrounded = true;
+
+    public LayerMask groundLayer;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -31,12 +41,14 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HandleMouse();
+        HandleJump();
     }
 
 
     void FixedUpdate()
     {
         Move();
+        CheckGround();
     }
     void Move()
     {
@@ -56,5 +68,25 @@ public class PlayerController : MonoBehaviour
 
         playerCamera.transform.localRotation = Quaternion.Euler(xRotation,0,0);
         transform.Rotate(Vector3.up * mouseX);
+    }
+
+    void HandleJump()
+    {
+        if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x,0,rb.linearVelocity.z);
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+    }
+
+    void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(transform.position + GroundCheckOffset,groundCheckRadius);
+    }
+
+    void CheckGround()
+    {
+        isGrounded = Physics.CheckSphere(transform.position + GroundCheckOffset, groundCheckRadius, groundLayer);
     }
 }
