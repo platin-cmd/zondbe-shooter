@@ -1,11 +1,7 @@
 using UnityEngine;
 using System.Collections;
-using Unity.Burst.Intrinsics;
-using UnityEngine.InputSystem;
-using GLTFast.Schema;
 using UnityEngine.SceneManagement;
-using NUnit.Framework.Internal;
-using JetBrains.Annotations;
+
 
 public class PlayerController : MonoBehaviour
 {
@@ -63,11 +59,29 @@ public class PlayerController : MonoBehaviour
 
     public float speedSlidePlus = 10;
 
+    [Header("крюк кошка")]
+
+    public GameObject aimObject;
+
+    public LayerMask hookMask;
+
+    public float maxDistance = 5;
+
+    public KeyCode HookKey = KeyCode.T;
+
+    public Vector3 targetPosition;
+
+    public float hookForce = 5;
+
     [Header("Quality of life")]
 
     public KeyCode restartKey = KeyCode.R;
 
     CapsuleCollider capsuleCollider;
+
+    public float hookSpeed = 40;
+
+    
 
     
 
@@ -96,6 +110,7 @@ public class PlayerController : MonoBehaviour
         {
             RestartCurrentScene();
         }
+        HandleHook();
     }
 
     public void RestartCurrentScene()
@@ -137,8 +152,19 @@ public class PlayerController : MonoBehaviour
             rb.linearVelocity = transform.forward * currentSpeed;
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, oldY, rb.linearVelocity.z);
                 break;
+            case "Hook":
+                rb.linearVelocity = (targetPosition - transform.position).normalized * hookSpeed;
+            break;
         }
         
+    }
+
+    private void OnCollisionEnter(Collision colission)
+    {
+        if(moveState == "Hook")
+        {
+            moveState = "Walk";
+        }
     }
 
 
@@ -227,6 +253,44 @@ public class PlayerController : MonoBehaviour
         if(isGrounded && moveState == "Walk" && currentSpeed != walkSpeed)
         {
             currentSpeed = walkSpeed;
+        }
+    }
+
+    void HandleHook()
+    {
+        Ray hookRay = new Ray(Camera.main.transform.position,Camera.main.transform.forward);
+
+        RaycastHit hitInfo;
+        if(Physics.Raycast(hookRay,out hitInfo, maxDistance, hookMask))
+        {
+            if(hitInfo.collider.tag == "HookTo")
+            {
+                aimObject.SetActive(true);
+                aimObject.transform.position = hitInfo.point;
+
+                if (Input.GetKeyDown(HookKey))
+                {
+                    targetPosition = hitInfo.point;
+                    moveState = "Hook";
+                }
+            }
+
+            else if(hitInfo.collider.tag == "HookOt")
+            {
+                aimObject.SetActive(true);
+                aimObject.transform.position = hitInfo.point;
+
+                if (Input.GetKeyDown(HookKey))
+                {
+                    Rigidbody objRb = hitInfo.collider.GetComponent<Rigidbody>();
+                    objRb.AddForce((transform.position - hitInfo.transform.position).normalized * hookForce, ForceMode.Impulse);
+                }
+            }
+            
+        }
+        else
+        {
+            aimObject.SetActive(false);
         }
     }
 }

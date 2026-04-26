@@ -3,12 +3,16 @@ using UnityEngine;
 
 public class Finish : MonoBehaviour
 {
-    public GameObject timer;
+    public timerController timer;
+
+    public GameObject winCanvas;
+
+    public GameObject defCanvas;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        timer.GetComponent<timerController>();
+        
     }
 
     // Update is called once per frame
@@ -21,9 +25,14 @@ public class Finish : MonoBehaviour
     {
         if(other.tag == "Player")
         {
-            
+            timer.StopAllCoroutines();
+            winCanvas.SetActive(true);
+            defCanvas.SetActive(false);
+
         }
     }
+
+    
 
        
     
