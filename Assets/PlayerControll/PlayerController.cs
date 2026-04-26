@@ -67,6 +67,8 @@ public class PlayerController : MonoBehaviour
 
     public KeyCode restartKey = KeyCode.R;
 
+    CapsuleCollider capsuleCollider;
+
     
 
     
@@ -81,6 +83,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
         cameraInitPosition = cameraRoot.localPosition;
+        capsuleCollider = GetComponent<CapsuleCollider>();
     }
 
     // Update is called once per frame
@@ -168,6 +171,8 @@ public class PlayerController : MonoBehaviour
         }
         moveState = "Walk";
         cameraRoot.localPosition = cameraInitPosition;
+        capsuleCollider.height = 2;
+        capsuleCollider.center = Vector3.zero;
         
     }
     
@@ -179,6 +184,8 @@ public class PlayerController : MonoBehaviour
             currentSpeed = slideSpeed;
             StartCoroutine("SlideTimer");
             cameraRoot.localPosition = cameraSlidePosition;
+            capsuleCollider.height = 1;
+            capsuleCollider.center = new Vector3 (capsuleCollider.center.x,-0.5f,capsuleCollider.center.z);
         }
         
         
