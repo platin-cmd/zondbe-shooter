@@ -1,10 +1,19 @@
 using UnityEngine;
+using System.Collections;
+using Unity.Burst.Intrinsics;
+using UnityEngine.InputSystem;
+using GLTFast.Schema;
+using UnityEngine.SceneManagement;
+using NUnit.Framework.Internal;
+using JetBrains.Annotations;
 
 public class PlayerController : MonoBehaviour
 {
     Rigidbody rb;
 
     float xRotation = 0;
+
+    public GameObject Gates;
 
     [Header("Движение")]
 
@@ -18,6 +27,8 @@ public class PlayerController : MonoBehaviour
 
     public GameObject playerCamera;
 
+    public float currentSpeed = 3;
+
     [Header("Прыгало")]
 
     public float jumpForce = 5; 
@@ -30,18 +41,69 @@ public class PlayerController : MonoBehaviour
 
     public LayerMask groundLayer;
 
+    [Header("Подкат")]
+    
+    public float slideSpeed=5;
+
+    public KeyCode slideKey = KeyCode.LeftControl;
+
+    public string moveState = "Walk";
+
+    public float slideTime = 2;
+
+    public float  fadeSpeedDelta = 3;
+
+    public Transform cameraRoot;
+
+    public Vector3 cameraSlidePosition;
+
+    Vector3 cameraInitPosition;
+
+    Vector3 cameraYInitPosition;
+
+    public float speedSlidePlus = 10;
+
+    [Header("Quality of life")]
+
+    public KeyCode restartKey = KeyCode.R;
+
+    
+
+    
+
+    
+
+    //public flopat jumpSlidePlus = 10;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        
         rb = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
+        cameraInitPosition = cameraRoot.localPosition;
     }
 
     // Update is called once per frame
     void Update()
     {
-        HandleMouse();
+        
         HandleJump();
+        HandleSlide();
+        if (Input.GetKeyDown(restartKey))
+        {
+            RestartCurrentScene();
+        }
+    }
+
+    public void RestartCurrentScene()
+    {
+       
+        SceneManager.LoadScene("Test");
+    }
+
+    void LateUpdate()
+    {
+        HandleMouse();
     }
 
 
@@ -50,32 +112,98 @@ public class PlayerController : MonoBehaviour
         Move();
         CheckGround();
     }
+
+    public void EnableBoost()
+    {
+        
+    }
     void Move()
     {
-        float moveX = Input.GetAxis("Horizontal");
-        float moveZ = Input.GetAxis("Vertical");
+        switch (moveState)
+        {
+            case "Walk":
+                float moveX = Input.GetAxis("Horizontal");
+                float moveZ = Input.GetAxis("Vertical");
 
-        Vector3 move = transform.right * moveX + transform.forward * moveZ;
+                Vector3 move = transform.right * moveX + transform.forward * moveZ;
 
-        rb.linearVelocity = new Vector3(move.x * walkSpeed, rb.linearVelocity.y, move.z * walkSpeed);
+                rb.linearVelocity = new Vector3(move.x * currentSpeed, rb.linearVelocity.y, move.z * currentSpeed);
+                break;
+            case "Slide":
+            float oldY = rb.linearVelocity.y;
+            rb.linearVelocity = transform.forward * currentSpeed;
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, oldY, rb.linearVelocity.z);
+                break;
+        }
+        
     }
 
+
+    
     void HandleMouse()
     {
-        float mouseX = Input.GetAxis("Mouse X") * mouseSensative * Time.deltaTime;
-        float mouseY = Input.GetAxis("Mouse Y") * mouseSensative * Time.deltaTime;
+        float mouseX = Input.GetAxis("Mouse X") * mouseSensative;
+        float mouseY = Input.GetAxis("Mouse Y") * mouseSensative;
         xRotation -= mouseY;
 
         playerCamera.transform.localRotation = Quaternion.Euler(xRotation,0,0);
         transform.Rotate(Vector3.up * mouseX);
+    }
+    
+
+    IEnumerator SlideTimer()
+    {
+        yield return new WaitForSeconds(slideTime);
+
+        while (true)
+        {
+            currentSpeed -= 1/fadeSpeedDelta;
+            if (currentSpeed <= walkSpeed)
+            {
+                currentSpeed = walkSpeed;
+                break;
+                
+;           }
+            yield return new WaitForSeconds(1/30f);
+        }
+        moveState = "Walk";
+        cameraRoot.localPosition = cameraInitPosition;
+        
+    }
+    
+    void HandleSlide()
+    {
+        if (Input.GetKeyDown(slideKey))
+        {
+            moveState = "Slide";
+            currentSpeed = slideSpeed;
+            StartCoroutine("SlideTimer");
+            cameraRoot.localPosition = cameraSlidePosition;
+        }
+        
+        
     }
 
     void HandleJump()
     {
         if(Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x,0,rb.linearVelocity.z);
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+            switch (moveState)
+            {
+                case "Walk":
+                    rb.linearVelocity = new Vector3(rb.linearVelocity.x,0,rb.linearVelocity.z);
+                    rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+                    break;
+
+                case "Slide":
+                    moveState ="Walk";
+                    rb.linearVelocity = new Vector3(rb.linearVelocity.x,0,rb.linearVelocity.z);
+                    rb.AddForce(Vector3.up * jumpForce,ForceMode.Impulse);
+
+                    currentSpeed += speedSlidePlus;
+                    break;
+            }
+            
         }
     }
 
@@ -88,5 +216,10 @@ public class PlayerController : MonoBehaviour
     void CheckGround()
     {
         isGrounded = Physics.CheckSphere(transform.position + GroundCheckOffset, groundCheckRadius, groundLayer);
+
+        if(isGrounded && moveState == "Walk" && currentSpeed != walkSpeed)
+        {
+            currentSpeed = walkSpeed;
+        }
     }
 }
