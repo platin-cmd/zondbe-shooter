@@ -10,6 +10,8 @@ TagManager:
   - ignoreCollision
   - S
   - Sharik
+  - HookTo
+  - HookOt
   layers:
   - Default
   - TransparentFX
