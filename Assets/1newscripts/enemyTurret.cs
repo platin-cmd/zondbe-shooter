@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using Unity.VisualScripting;
 
 
 public enum EnemyState
@@ -44,8 +45,11 @@ public class enemyTurret : MonoBehaviour
                 dir = (player.transform.position - transform.position).normalized;
                 if(Physics.Raycast(transform.position,dir, out hit, distance, castLayer))
                 {
-                    state = EnemyState.Attack;
+                    if(hit.collider.gameObject.tag == "Player")
+                    {
+                        state = EnemyState.Attack;
                     StartCoroutine("ShootTimer");
+                    }
                 }
                 break;
             case EnemyState.Attack:
@@ -57,7 +61,17 @@ public class enemyTurret : MonoBehaviour
                 {
                     state = EnemyState.Stand;
                     StopAllCoroutines();
-                    
+                }
+
+
+
+                else
+                {
+                    if(hit.collider.gameObject.tag != "Player")
+                    {
+                        state = EnemyState.Stand;
+                        StopAllCoroutines();
+                    }
                 }
 
                 break;

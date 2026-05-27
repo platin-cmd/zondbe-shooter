@@ -8,9 +8,15 @@ public class PlayerController : MonoBehaviour
 {
     Rigidbody rb;
 
+    public GameObject playerCapsule;
+
     float xRotation = 0;
 
     public GameObject Gates;
+
+    public GameObject defCanvas;
+
+    public GameObject deadCanvas;
 
     [Header("Движение")]
 
@@ -122,6 +128,13 @@ public class PlayerController : MonoBehaviour
         }
         HandleHook();
         HealthText.text = "HP" + CurrentHealth;
+
+        if(CurrentHealth < 1)
+        {
+            defCanvas.SetActive(false);
+            deadCanvas.SetActive(true);
+            playerCapsule.SetActive(!false);
+        }
     }
 
     public void RestartCurrentScene()

@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 public class PistolController : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class PistolController : MonoBehaviour
 
     public GameObject hitRockEffect;
 
+
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -34,7 +37,21 @@ public class PistolController : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            animator.Play("shoot");
+            if (bullet == 0)
+            {
+                string bebe  = animator.GetCurrentAnimatorClipInfo(0)[0].clip.name;
+                //добавь звук дебик
+                if (bebe != "prezaruadka")
+                {
+                    animator.Play("reload");
+                }
+                return;
+            }
+            else
+            {
+                animator.Play("shoot");
+            }
+            
         }
 
         if (Input.GetKeyDown(osmotrKey))
@@ -46,6 +63,8 @@ public class PistolController : MonoBehaviour
         {
             animator.Play("reload");
         }
+
+        
     }
 
     public void reloadComplete()
@@ -56,12 +75,7 @@ public class PistolController : MonoBehaviour
     public void shootComplete()
     {
 
-        if (bullet == 0)
-        {
-            //добавь звук дебик
-            animator.Play("reload");
-            return;
-        } 
+        
 
         RaycastHit hit;
         if(Physics.Raycast(Camera.main.transform.position,Camera.main.transform.forward,out hit, 1000, mellstroi))
