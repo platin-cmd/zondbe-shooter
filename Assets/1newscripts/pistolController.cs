@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 using TMPro;
 
 public class PistolController : MonoBehaviour
@@ -16,6 +15,10 @@ public class PistolController : MonoBehaviour
     public float maxBullet = 7;
 
     public TMP_Text bulletsText;
+
+    public LayerMask mellstroi;
+
+    public GameObject hitRockEffect;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -59,7 +62,19 @@ public class PistolController : MonoBehaviour
             animator.Play("reload");
             return;
         } 
-        
+
+        RaycastHit hit;
+        if(Physics.Raycast(Camera.main.transform.position,Camera.main.transform.forward,out hit, 1000, mellstroi))
+        {
+            GameObject hitObject = hit.collider.gameObject;
+            if (hitObject.CompareTag("Untagged"))
+            {
+                Vector3 pos = hit.point + hit.normal * 0.01f;
+                Quaternion rot = Quaternion.LookRotation(hit.normal);
+                Instantiate(hitRockEffect,pos,rot); 
+            }
+        }
+
         bullet -= 1;
 
     }

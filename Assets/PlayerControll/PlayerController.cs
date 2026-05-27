@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 
 public class PlayerController : MonoBehaviour
@@ -81,6 +82,14 @@ public class PlayerController : MonoBehaviour
 
     public float hookSpeed = 40;
 
+    [Header("Life without quality")]
+
+    public float MaxHealth = 100;
+
+    public float CurrentHealth;
+
+    public TMP_Text HealthText;
+
     
 
     
@@ -98,6 +107,7 @@ public class PlayerController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         cameraInitPosition = cameraRoot.localPosition;
         capsuleCollider = GetComponent<CapsuleCollider>();
+        CurrentHealth = MaxHealth;
     }
 
     // Update is called once per frame
@@ -111,6 +121,7 @@ public class PlayerController : MonoBehaviour
             RestartCurrentScene();
         }
         HandleHook();
+        HealthText.text = "HP" + CurrentHealth;
     }
 
     public void RestartCurrentScene()
@@ -157,6 +168,13 @@ public class PlayerController : MonoBehaviour
             break;
         }
         
+    }
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Bullet")
+        {
+            CurrentHealth = CurrentHealth - 50;
+        }
     }
 
     private void OnCollisionEnter(Collision colission)
