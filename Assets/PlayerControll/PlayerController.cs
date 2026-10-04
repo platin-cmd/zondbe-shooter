@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
 using TMPro;
+using Unity.VisualScripting;
 
 
 public class PlayerController : MonoBehaviour
@@ -96,6 +97,26 @@ public class PlayerController : MonoBehaviour
 
     public TMP_Text HealthText;
 
+    [Header("Ishowspeed")]
+
+    public TMP_Text Speedometr;
+
+    [Header("rivok")]
+
+    public KeyCode dashKey =  KeyCode.LeftShift;
+
+    public float dashSpeed = 10;
+
+    public float dashTime = 0.2f;
+
+    public float dashSlowDownTime = 0.4f;
+
+    public float dashCooldown = 1;
+
+    bool canDash = true;
+
+
+
     
 
     
@@ -119,7 +140,7 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Handledash();
         HandleJump();
         HandleSlide();
         if (Input.GetKeyDown(restartKey))
@@ -128,6 +149,7 @@ public class PlayerController : MonoBehaviour
         }
         HandleHook();
         HealthText.text = "HP" + CurrentHealth;
+        Speedometr.text = "spd.linear" + rb.linearVelocity.ToString() + "\n" + "spd.current " + currentSpeed;
 
         if(CurrentHealth < 1)
         {
@@ -172,12 +194,40 @@ public class PlayerController : MonoBehaviour
                 rb.linearVelocity = new Vector3(move.x * currentSpeed, rb.linearVelocity.y, move.z * currentSpeed);
                 break;
             case "Slide":
+            if (!isGrounded || rb.linearVelocity.sqrMagnitude <= 0.1f)
+            {
+                currentSpeed = walkSpeed;
+                StopCoroutine("SlideTimer");
+                moveState = "Walk";
+                cameraRoot.localPosition = cameraInitPosition;
+                capsuleCollider.height = 2;
+                capsuleCollider.center = Vector3.zero;
+                break;
+            }
             float oldY = rb.linearVelocity.y;
             rb.linearVelocity = transform.forward * currentSpeed;
             rb.linearVelocity = new Vector3(rb.linearVelocity.x, oldY, rb.linearVelocity.z);
                 break;
             case "Hook":
                 rb.linearVelocity = (targetPosition - transform.position).normalized * hookSpeed;
+                break;
+            case "Dash":
+            float oldYDash = rb.linearVelocity.y;
+            rb.linearVelocity = transform.forward * currentSpeed;
+            rb.linearVelocity = new Vector3(rb.linearVelocity.x, oldYDash, rb.linearVelocity.z);
+            break;
+            case "DashSlowDown":
+            float oldYDashSlowDown = rb.linearVelocity.y;
+            currentSpeed = Mathf.MoveTowards(currentSpeed,walkSpeed,dashSlowDownTime * Time.fixedDeltaTime);
+            Vector3 vel = transform.forward * currentSpeed;
+            vel.y = oldYDashSlowDown;
+            rb.linearVelocity = vel;
+            if (currentSpeed <= walkSpeed)
+            {
+                currentSpeed = walkSpeed;
+                moveState = "Walk";
+            }
+            
             break;
         }
         
@@ -235,7 +285,7 @@ public class PlayerController : MonoBehaviour
     
     void HandleSlide()
     {
-        if (Input.GetKeyDown(slideKey))
+        if (Input.GetKeyDown(slideKey) && isGrounded && rb.linearVelocity.sqrMagnitude > 0.1f)
         {
             moveState = "Slide";
             currentSpeed = slideSpeed;
@@ -323,5 +373,26 @@ public class PlayerController : MonoBehaviour
         {
             aimObject.SetActive(false);
         }
+    }
+
+    void Handledash()
+    {
+        if(Input.GetKeyDown(dashKey) && canDash && moveState == "Walk")
+        {
+            StartCoroutine("Dash");
+        }
+    }
+
+    IEnumerator Dash()
+    {
+        canDash = false;
+        moveState = "Dash";
+        currentSpeed = dashSpeed;
+        yield return new WaitForSeconds(dashTime);
+        
+        moveState = "DashSlowDown";
+
+        yield return new WaitForSeconds(dashCooldown);
+        canDash = true;
     }
 }
