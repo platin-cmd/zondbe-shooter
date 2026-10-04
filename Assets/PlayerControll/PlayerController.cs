@@ -67,6 +67,13 @@ public class PlayerController : MonoBehaviour
 
     public float speedSlidePlus = 10;
 
+    [Header("slidejumper")]
+
+    public float slideJumpMultiplier = 1.5f;
+
+    public float slideJumpSlowDown = 8;
+
+
     [Header("крюк кошка")]
 
     public GameObject aimObject;
@@ -212,23 +219,34 @@ public class PlayerController : MonoBehaviour
                 rb.linearVelocity = (targetPosition - transform.position).normalized * hookSpeed;
                 break;
             case "Dash":
-            float oldYDash = rb.linearVelocity.y;
-            rb.linearVelocity = transform.forward * currentSpeed;
-            rb.linearVelocity = new Vector3(rb.linearVelocity.x, oldYDash, rb.linearVelocity.z);
+                float oldYDash = rb.linearVelocity.y;
+                rb.linearVelocity = transform.forward * currentSpeed;
+                rb.linearVelocity = new Vector3(rb.linearVelocity.x, oldYDash, rb.linearVelocity.z);
             break;
             case "DashSlowDown":
-            float oldYDashSlowDown = rb.linearVelocity.y;
-            currentSpeed = Mathf.MoveTowards(currentSpeed,walkSpeed,dashSlowDownTime * Time.fixedDeltaTime);
-            Vector3 vel = transform.forward * currentSpeed;
-            vel.y = oldYDashSlowDown;
-            rb.linearVelocity = vel;
-            if (currentSpeed <= walkSpeed)
-            {
-                currentSpeed = walkSpeed;
-                moveState = "Walk";
-            }
+                float oldYDashSlowDown = rb.linearVelocity.y;
+                currentSpeed = Mathf.MoveTowards(currentSpeed,walkSpeed,dashSlowDownTime * Time.fixedDeltaTime);
+                Vector3 vel = transform.forward * currentSpeed;
+                vel.y = oldYDashSlowDown;
+                rb.linearVelocity = vel;
+                if (currentSpeed <= walkSpeed)
+                {
+                    currentSpeed = walkSpeed;
+                    moveState = "Walk";
+                }
             
-            break;
+                break;
+            case "SlideJump":
+                Vector3 horizontal = new Vector3(rb.linearVelocity.x,0,rb.linearVelocity.z);
+                float horizontalSpeed = horizontal.magnitude;
+
+
+                if(isGrounded && rb.linearVelocity.y <= 0.1f)
+                {
+                    moveState = "Walk";
+                    currentSpeed = walkSpeed;
+                }
+                break;
         }
         
     }
@@ -310,12 +328,20 @@ public class PlayerController : MonoBehaviour
                     break;
 
                 case "Slide":
-                    moveState ="Walk";
-                    rb.linearVelocity = new Vector3(rb.linearVelocity.x,0,rb.linearVelocity.z);
-                    rb.AddForce(Vector3.up * jumpForce,ForceMode.Impulse);
 
-                    currentSpeed += speedSlidePlus;
+                    StopCoroutine("slideTimer");
+
+                    Vector3 horizontalVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
+                    horizontalVelocity *= slideJumpMultiplier;
+                    moveState = "SlideJump";
+                    cameraRoot.localPosition = cameraInitPosition;
+                    capsuleCollider.height = 2;
+                    capsuleCollider.center = Vector3.zero;
+                    rb.linearVelocity = new Vector3(horizontalVelocity.x,0,horizontalVelocity.z);
+                    rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
                     break;
+                    
+                    
             }
             
         }
