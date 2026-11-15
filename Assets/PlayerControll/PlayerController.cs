@@ -3,6 +3,8 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 
 
 public class PlayerController : MonoBehaviour
@@ -122,6 +124,10 @@ public class PlayerController : MonoBehaviour
 
     bool canDash = true;
 
+    Vector3 groundNormal = Vector3.up;
+
+    public float dashGroundForce = 3;
+
 
 
     
@@ -219,20 +225,59 @@ public class PlayerController : MonoBehaviour
                 rb.linearVelocity = (targetPosition - transform.position).normalized * hookSpeed;
                 break;
             case "Dash":
+                Vector3 direction = transform.forward;
+                if(isGrounded)
+                {
+                    direction = Vector3.ProjectOnPlane(transform.forward, groundNormal).normalized;
+                }
+
+                Vector3 velocity = direction * dashSpeed;
+
+                if(isGrounded)
+                {
+                    velocity += Vector3.down * dashGroundForce;
+                }
+                else
+                {
+                    velocity.y = rb.linearVelocity.y;
+                }
+                rb.linearVelocity = velocity;
+                break;
+
+
+
+
                 float oldYDash = rb.linearVelocity.y;
                 rb.linearVelocity = transform.forward * currentSpeed;
                 rb.linearVelocity = new Vector3(rb.linearVelocity.x, oldYDash, rb.linearVelocity.z);
             break;
             case "DashSlowDown":
-                float oldYDashSlowDown = rb.linearVelocity.y;
-                currentSpeed = Mathf.MoveTowards(currentSpeed,walkSpeed,dashSlowDownTime * Time.fixedDeltaTime);
-                Vector3 vel = transform.forward * currentSpeed;
-                vel.y = oldYDashSlowDown;
-                rb.linearVelocity = vel;
+                currentSpeed = Mathf.MoveTowards(currentSpeed, walkSpeed, dashSlowDownTime * Time.fixedDeltaTime);
+
+                direction = transform.forward;
+
+                if (isGrounded)
+                {
+                    direction = Vector3.ProjectOnPlane(transform.forward, groundNormal).normalized;
+                }
+
+                velocity = direction * currentSpeed;
+
+                if (isGrounded)
+                {
+                    velocity += Vector3.down * dashGroundForce;
+                }
+                else
+                {
+                    velocity.y = rb.linearVelocity.y;
+                }
+
+                rb.linearVelocity = velocity;
+                
                 if (currentSpeed <= walkSpeed)
                 {
-                    currentSpeed = walkSpeed;
                     moveState = "Walk";
+                    StartCoroutine("DashCooldown");
                 }
             
                 break;
@@ -355,6 +400,23 @@ public class PlayerController : MonoBehaviour
 
     void CheckGround()
     {
+        RaycastHit hit;
+
+        Vector3 origin = transform.position + GroundCheckOffset + Vector3.up * 0.2f;
+
+        if(Physics.SphereCast(origin, groundCheckRadius, Vector3.down, out hit, 0.5f, groundLayer))
+        {
+            isGrounded = true;
+            groundNormal = hit.normal;
+        }
+        else
+        {
+            isGrounded = true;
+            groundNormal = Vector3.up;
+        }
+
+
+
         isGrounded = Physics.CheckSphere(transform.position + GroundCheckOffset, groundCheckRadius, groundLayer);
 
         if(isGrounded && moveState == "Walk" && currentSpeed != walkSpeed)
@@ -415,10 +477,17 @@ public class PlayerController : MonoBehaviour
         moveState = "Dash";
         currentSpeed = dashSpeed;
         yield return new WaitForSeconds(dashTime);
+
+        currentSpeed = dashSpeed;
         
         moveState = "DashSlowDown";
 
+        
+    }
+    IEnumerator DashCooldown()
+    {
         yield return new WaitForSeconds(dashCooldown);
+
         canDash = true;
     }
 }
